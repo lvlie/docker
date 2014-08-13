@@ -3,7 +3,8 @@ FROM centos:centos7
 
 MAINTAINER Leon (lvlie) Vliegenthart
 
-# Dont have anything to run now... Is this the best idea? :)
+# Almost all my containers will need EPEL
+RUN yum install -y http://dl.fedoraproject.org/pub/epel/beta/7/x86_64/epel-release-7-0.2.noarch.rpm
 
 # CMD can be overwritten easily, so this isnt bad for an intermediate image
 CMD ["/bin/bash"] 
