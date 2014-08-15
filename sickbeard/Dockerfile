@@ -12,6 +12,12 @@ RUN yum install -y python-cheetah.x86_64 && yum clean all
 # get latest git data
 RUN git clone git://github.com/midgetspy/Sick-Beard.git sickbeard
 
+# add user for media
+RUN useradd -u 800 media
+
+# switch to user media
+USER media
+
 # usuall runs on 8081
 EXPOSE 8081
 

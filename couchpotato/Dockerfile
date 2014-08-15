@@ -9,6 +9,12 @@ RUN yum install -y git && yum clean all
 # get latest git data
 RUN git clone https://github.com/RuudBurger/CouchPotatoServer.git
 
+# add user for media
+RUN useradd -u 800 media
+
+# switch to user media
+USER media
+
 # usuall runs on 5050
 EXPOSE 5050
 
