@@ -15,11 +15,17 @@ RUN git clone git://github.com/midgetspy/Sick-Beard.git sickbeard
 # add user for media
 RUN useradd -u 800 media
 
-# switch to user media
-USER media
-
 # usuall runs on 8081
 EXPOSE 8081
 
+# add start script
+ADD start.sh /start.sh
+
+# make executable
+RUN chmod +x /start.sh
+
+# switch to user media
+USER media
+
 # CMD can be easily overwritten for troubleshooting
-CMD cd sickbeard && python SickBeard.py
+CMD ["/start.sh"]
