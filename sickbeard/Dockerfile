@@ -24,6 +24,9 @@ ADD start.sh /start.sh
 # make executable
 RUN chmod +x /start.sh
 
+# chown /sickbeard
+RUN chown -R media:media /sickbeard
+
 # switch to user media
 USER media
 
