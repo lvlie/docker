@@ -1,5 +1,5 @@
-# ubuntu has a regularly updated repo, so lets use that
-FROM ubuntu:14.04
+# ubuntu has a regularly updated repo, so lets use that (but use LTS)
+FROM ubuntu:trusty
 
 MAINTAINER Leon (lvlie) Vliegenthart
 
