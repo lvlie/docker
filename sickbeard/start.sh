@@ -9,6 +9,10 @@ test -d /config/sickbeard || mkdir /config/sickbeard
 
 cd /sickbeard
 
+# get latest git data
+git pull origin master
+
+
 for file in config.ini sickbeard.db
  do
 	if [ -f /config/sickbeard/${file} ]
