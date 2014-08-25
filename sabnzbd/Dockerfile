@@ -23,7 +23,7 @@ RUN useradd -u 800 media
 
 # add the startup script
 ADD start.sh /start.sh
-RUN chmod u+x /start.sh
+RUN chmod +x /start.sh
 
 # switch to user media
 USER media
