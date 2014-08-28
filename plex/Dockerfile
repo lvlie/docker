@@ -3,11 +3,9 @@ FROM lvlie/base
 
 MAINTAINER Leon (lvlie) Vliegenthart
 
-# add plex repo
-ADD plex.repo /etc/yum.repos.d/plex.repo
-
-# install packages
-RUN yum install -y --nogpgcheck plexmediaserver && yum clean all
+# install packages and clean up directly after to not get a bloated container
+RUN curl -o /plexmediaserver.rpm http://downloads.plexapp.com/plex-media-server/0.9.9.16.555-50cd0c3/plexmediaserver-0.9.9.16.555-50cd0c3.x86_64.rpm && \
+	yum localinstall -y --nogpgcheck /plexmediaserver.rpm && yum clean all && rm -f /plexmediaserver.rpm
 
 # add user for media, start.sh will switch to media user
 RUN useradd -u 800 media
