@@ -12,11 +12,14 @@ RUN apt-get install -y software-properties-common && apt-get clean
 # The official .deb does not seem to get updated very much, so we'll use jcfp's version
 RUN add-apt-repository ppa:jcfp/ppa
 
+# we need to enable multiverse for unrar-nonfree version
+RUN sed -i 's/universe/universe multiverse/g' /etc/apt/sources.list
+
 # update package list
 RUN apt-get update
 
 # install packages
-RUN apt-get install -y sabnzbdplus sabnzbdplus-theme-mobile sabnzbdplus-theme-plush unrar-free zip && apt-get clean
+RUN apt-get install -y sabnzbdplus sabnzbdplus-theme-mobile sabnzbdplus-theme-plush unrar zip && apt-get clean
 
 # add user for media
 RUN useradd -u 800 media
