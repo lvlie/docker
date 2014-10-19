@@ -7,7 +7,7 @@ MAINTAINER Leon (lvlie) Vliegenthart
 RUN yum -y update && yum clean all
 
 # Almost all my containers will need EPEL
-RUN yum install -y http://dl.fedoraproject.org/pub/epel/beta/7/x86_64/epel-release-7-1.noarch.rpm && yum clean all
+RUN yum install -y epel-release && yum clean all
 
 # CMD can be overwritten easily, so this isnt bad for an intermediate image
 CMD ["/bin/bash"] 
