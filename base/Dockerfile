@@ -3,6 +3,9 @@ FROM centos:centos7
 
 MAINTAINER Leon (lvlie) Vliegenthart
 
+# Update the image
+RUN yum -y update && yum clean all
+
 # Almost all my containers will need EPEL
 RUN yum install -y http://dl.fedoraproject.org/pub/epel/beta/7/x86_64/epel-release-7-1.noarch.rpm && yum clean all
 
