@@ -4,7 +4,7 @@ FROM lvlie/base
 MAINTAINER Leon (lvlie) Vliegenthart
 
 # install packages and clean up directly after to not get a bloated container
-RUN curl -o /plexmediaserver.rpm https://downloads.plex.tv/plex-media-server/0.9.11.4.739-a4e710f/plexmediaserver-0.9.11.4.739-a4e710f.x86_64.rpm && \
+RUN curl -o /plexmediaserver.rpm https://downloads.plex.tv/plex-media-server/0.9.11.17.986-269b82b/plexmediaserver-0.9.11.17.986-269b82b.x86_64.rpm && \
 	yum localinstall -y --nogpgcheck /plexmediaserver.rpm && yum clean all && rm -f /plexmediaserver.rpm
 
 # add user for media, start.sh will switch to media user
