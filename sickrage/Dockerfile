@@ -10,7 +10,7 @@ RUN yum install -y git && yum clean all
 RUN yum install -y python-cheetah.x86_64 && yum clean all
 
 # get latest git data
-RUN git clone https://github.com/echel0n/SickRage.git sickrage
+RUN git clone https://github.com/SickRage/SickRage.git sickrage
 
 # add user for media
 RUN useradd -u 800 media
