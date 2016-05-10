@@ -4,8 +4,7 @@ FROM lvlie/base
 MAINTAINER Leon (lvlie) Vliegenthart
 
 # Install packages 
-RUN yum install -y httpd mod_ssl && yum clean all || true # workaround docker hub problem
-RUN yum install -y httpd mod_ssl && yum clean all  # with any luck, the failing package is now already installed
+RUN yum install -y httpd mod_ssl && yum clean all
 
 # run on httpd
 EXPOSE 443
