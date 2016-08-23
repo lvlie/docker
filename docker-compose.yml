@@ -53,3 +53,13 @@ timemachine:
   net: "host"
   volumes: 
     - /data/backup/:/backup/
+vpn:
+  container_name: vpn
+  image: docker.io/jpetazzo/dockvpn
+  ports:
+    - "1194:1194/udp"
+    - "444:443/tcp"
+  cap_add:
+    - NET_ADMIN
+  volumes:
+    - /config/vpn/:/etc/openvpn/
