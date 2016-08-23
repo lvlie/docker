@@ -19,7 +19,7 @@ RUN sed -i 's/universe/universe multiverse/g' /etc/apt/sources.list
 RUN apt-get update
 
 # install packages
-RUN apt-get install -y sabnzbdplus sabnzbdplus-theme-mobile sabnzbdplus-theme-plush unrar zip && apt-get clean
+RUN apt-get install -y sabnzbdplus unrar zip && apt-get clean
 
 # add user for media
 RUN useradd -u 800 media
