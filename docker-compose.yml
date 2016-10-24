@@ -52,7 +52,7 @@ services:
     container_name: plex
     build: ./plex
     image: docker.io/lvlie/plex
-    net: "host"
+    network_mode: "host"
     volumes: 
       - /config/plex/:/config/plex/
       - /data/:/data/
@@ -60,7 +60,7 @@ services:
     container_name: timemachine
     build: ./timemachine
     image: docker.io/lvlie/timemachine
-    net: "host"
+    network_mode: "host"
     volumes: 
       - /data/backup/:/backup/
   vpn:
