@@ -22,7 +22,7 @@ sleep 1
 #avahi-daemon -D
 #sleep 1
 
-su - media -c "cd /usr/lib/plexmediaserver && HOME=/config/plex ./start.sh & " 
+su - media -c "cd /usr/lib/plexmediaserver && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/plexmediaserver && HOME=/config/plex ./Plex\ Media\ Server & " 
 sleep 5
 
 tail -f /config/plex/Library/Logs/**/*.log
