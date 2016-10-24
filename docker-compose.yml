@@ -1,65 +1,75 @@
 # Docker compose file for lvlie docker images. We use the automatically built docker images from the hub, so we dont specify the build key. 
 # The source however is in the same git repository. 
 
-shellinabox:
-  container_name: shellinabox
-  image: docker.io/lvlie/shellinabox
-  ports:
-    - "4200:4200"
-proxy:
-  container_name: proxy
-  image: docker.io/lvlie/proxy
-  ports:
-    - "443:443"
-  volumes:
-    - /config/httpd/:/config/httpd/:ro
-sabnzbd:
-  container_name: sabnzbd
-  image: docker.io/lvlie/sabnzbd
-  ports:
-    - "8080:8080"
-  volumes:
-    - /config/sabnzbd:/config/sabnzbd/
-    - /data/cache/:/cache/
-    - /data/:/data/
-sickrage:
-  container_name: sickrage
-  image: docker.io/lvlie/sickrage
-  ports:
-    - "8081:8081"
-  volumes:
-    - /config/sickrage/:/config/sickrage/
-    - /data/TV/:/data/TV/
-    - /data/cache/:/cache/
-couchpotato:
-  container_name: couchpotato
-  image: docker.io/lvlie/couchpotato
-  ports: 
-    - "5050:5050"
-  volumes:
-    - /config/couchpotato/:/config/couchpotato/
-    - /data/Movies/:/data/Movies/
-    - /data/cache/:/cache/
-plex:
-  container_name: plex
-  image: docker.io/lvlie/plex
-  net: "host"
-  volumes: 
-    - /config/plex/:/config/plex/
-    - /data/:/data/
-timemachine:
-  container_name: timemachine
-  image: docker.io/lvlie/timemachine
-  net: "host"
-  volumes: 
-    - /data/backup/:/backup/
-vpn:
-  container_name: vpn
-  image: docker.io/jpetazzo/dockvpn
-  ports:
-    - "1194:1194/udp"
-    - "444:443/tcp"
-  cap_add:
-    - NET_ADMIN
-  volumes:
-    - /config/vpn/:/etc/openvpn/
+version: '2' 
+
+services:
+  shellinabox:
+    container_name: shellinabox
+    build: ./shellinabox
+    image: docker.io/lvlie/shellinabox
+    ports:
+      - "4200:4200"
+  proxy:
+    container_name: proxy
+    build: ./proxy
+    image: docker.io/lvlie/proxy
+    ports:
+      - "443:443"
+    volumes:
+      - /config/httpd/:/config/httpd/:ro
+  sabnzbd:
+    container_name: sabnzbd
+    build: ./sabnzbd
+    image: docker.io/lvlie/sabnzbd
+    ports:
+      - "8080:8080"
+    volumes:
+      - /config/sabnzbd:/config/sabnzbd/
+      - /data/cache/:/cache/
+      - /data/:/data/
+  sickrage:
+    container_name: sickrage
+    build: ./sickrage
+    image: docker.io/lvlie/sickrage
+    ports:
+      - "8081:8081"
+    volumes:
+      - /config/sickrage/:/config/sickrage/
+      - /data/TV/:/data/TV/
+      - /data/cache/:/cache/
+  couchpotato:
+    container_name: couchpotato
+    build: ./couchpotato
+    image: docker.io/lvlie/couchpotato
+    ports: 
+      - "5050:5050"
+    volumes:
+      - /config/couchpotato/:/config/couchpotato/
+      - /data/Movies/:/data/Movies/
+      - /data/cache/:/cache/
+  plex:
+    container_name: plex
+    build: ./plex
+    image: docker.io/lvlie/plex
+    net: "host"
+    volumes: 
+      - /config/plex/:/config/plex/
+      - /data/:/data/
+  timemachine:
+    container_name: timemachine
+    build: ./timemachine
+    image: docker.io/lvlie/timemachine
+    net: "host"
+    volumes: 
+      - /data/backup/:/backup/
+  vpn:
+    container_name: vpn
+    image: docker.io/jpetazzo/dockvpn
+    ports:
+      - "1194:1194/udp"
+      - "444:443/tcp"
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - /config/vpn/:/etc/openvpn/
