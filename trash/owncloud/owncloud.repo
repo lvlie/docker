@@ -1,7 +1,0 @@
-[isv_ownCloud_community]
-name=Latest stable community release of ownCloud (CentOS_CentOS-7)
-type=rpm-md
-baseurl=http://download.opensuse.org/repositories/isv:/ownCloud:/community/CentOS_CentOS-7/
-gpgcheck=1
-gpgkey=http://download.opensuse.org/repositories/isv:/ownCloud:/community/CentOS_CentOS-7/repodata/repomd.xml.key
-enabled=1

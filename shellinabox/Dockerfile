@@ -1,10 +1,9 @@
-# lets use my default centos7 base image
-FROM lvlie/base
+FROM centos:7
 
 MAINTAINER Leon (lvlie) Vliegenthart
 
-# Install packages 
-RUN yum install -y shellinabox openssh-clients && yum clean all
+# Install packages (needs epel)
+RUN yum install -y epel-release && yum install -y shellinabox openssh-clients && yum clean all
 
 # add user for media
 RUN useradd -u 800 ssh

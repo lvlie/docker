@@ -1,5 +1,4 @@
-# lets use my default centos7 base image
-FROM lvlie/base
+FROM centos:7
 
 MAINTAINER Leon (lvlie) Vliegenthart
 
