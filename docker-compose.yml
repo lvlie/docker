@@ -19,6 +19,7 @@ services:
       - "443:443"
     volumes:
       - /config/httpd/:/config/httpd/:ro
+      - /etc/letsencrypt/:/config/ssl/:ro
     restart: always
   sabnzbd:
     container_name: sabnzbd
