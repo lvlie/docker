@@ -9,4 +9,4 @@ sabnzbdplus --daemon --config-file /config/sabnzbd -s 0.0.0.0:8080
 
 sleep 5
 
-tail -f /config/sabnzbd/logs/sabnzbd.*
+tail -f /config/sabnzbd/logs/sabnzbd.log
