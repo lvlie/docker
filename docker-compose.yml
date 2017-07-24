@@ -82,3 +82,11 @@ services:
     volumes:
       - /config/vpn/:/etc/openvpn/
     restart: always
+  plexpy:
+    container_name: plexpy
+    image: docker.io/lvlie/plexpy
+    ports:
+      - "8181:8181/tcp"
+    volumes:
+      - /config/plexpy/:/config/plexpy
+    restart: always
