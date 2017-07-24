@@ -84,6 +84,7 @@ services:
     restart: always
   plexpy:
     container_name: plexpy
+    build: ./plexpy
     image: docker.io/lvlie/plexpy
     ports:
       - "8181:8181/tcp"
