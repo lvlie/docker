@@ -33,6 +33,6 @@ RUN mkdir -p /opt/plexpy && chown plexpy /opt/plexpy
 
 USER plexpy
 
-RUN git clone --depth 1  https://github.com/drzoidberg33/plexpy.git /opt/plexpy && \
+RUN git clone --depth 1  https://github.com/drzoidberg33/plexpy.git /opt/plexpy
 
 CMD ["/start.sh"]
