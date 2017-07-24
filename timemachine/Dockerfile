@@ -18,7 +18,7 @@ RUN echo "tm:backup"|chpasswd
 RUN echo "- -tcp -noddp -uamlist uams_dhx.so,uams_dhx2_passwd.so -nosavepassword" >> /etc/netatalk/afpd.conf
 
 # Create the config for the timemachine location
-RUN echo "/backup "TM Backup" allow:tm cnidscheme:dbd volsizelimit:500000 options:usedots,upriv,tm" >> /etc/netatalk/AppleVolumes.default
+RUN echo "/backup \"TM Backup\" allow:tm cnidscheme:dbd volsizelimit:500000 options:usedots,upriv,tm" >> /etc/netatalk/AppleVolumes.default
 
 # add the startup script
 ADD start.sh /start.sh
