@@ -102,3 +102,14 @@ services:
       - /data/TV/:/data/TV/
       - /data/cache/:/cache/
     restart: always
+  radarr:
+    container_name: radarr
+    build: ./radarr
+    image: docker.io/lvlie/radarr
+    ports:
+      - "7878:7878/tcp"
+    volumes:
+      - /config/radarr/:/config/radarr
+      - /data/Movies/:/data/Movies/
+      - /data/cache/:/cache/
+    restart: always
