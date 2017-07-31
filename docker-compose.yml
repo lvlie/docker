@@ -91,3 +91,14 @@ services:
     volumes:
       - /config/plexpy/:/config/plexpy
     restart: always
+  sonarr:
+    container_name: sonarr
+    build: ./sonarr
+    image: docker.io/lvlie/sonarr
+    ports:
+      - "8989:8989/tcp"
+    volumes:
+      - /config/sonarr/:/config/sonarr
+      - /data/TV/:/data/TV/
+      - /data/cache/:/cache/
+    restart: always
