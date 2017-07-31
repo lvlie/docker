@@ -23,7 +23,7 @@ RUN \
        /var/cache/apk/* \
        /tmp/*
 
-RUN curl http://download.sonarr.tv/v2/master/mono/NzbDrone.master.tar.gz -o NzbDrone.tar.gz && \
+RUN curl -L http://download.sonarr.tv/v2/master/mono/NzbDrone.master.tar.gz -o NzbDrone.tar.gz && \
   tar xzf NzbDrone.tar.gz && \
   rm NzbDrone.tar.gz
 
