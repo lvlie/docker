@@ -9,9 +9,11 @@ ENV LANG='en_US.UTF-8' \
 EXPOSE 8989
 
 RUN \
+ echo http://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
  apk --update add --no-cache \
        ca-certificates \
        bash \
+       curl \
        libmediainfo \
        mono \
        tzdata && \
@@ -21,7 +23,7 @@ RUN \
        /var/cache/apk/* \
        /tmp/*
 
-RUN wget http://update.sonarr.tv/v2/master/mono/NzbDrone.master.tar.gz -O NzbDrone.tar.gz && \
+RUN curl http://download.sonarr.tv/v2/master/mono/NzbDrone.master.tar.gz -o NzbDrone.tar.gz && \
   tar xzf NzbDrone.tar.gz && \
   rm NzbDrone.tar.gz
 
@@ -29,4 +31,4 @@ RUN adduser -S -u 800 sonarr
 
 USER sonarr
 
-CMD ["mono", "--no-browser", "-data=/config/sonarr", "&", "wait"]
+CMD mono /NzbDrone/NzbDrone.exe --no-browser -data=/config/sonarr & wait
