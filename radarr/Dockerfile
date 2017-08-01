@@ -1,4 +1,4 @@
-FROM alpine
+FROM centos:7
 
 MAINTAINER Leon (lvlie) Vliegenthart
 
