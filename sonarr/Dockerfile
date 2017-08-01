@@ -4,7 +4,9 @@ MAINTAINER Leon (lvlie) Vliegenthart
 
 EXPOSE 8989
 
-RUN yum install curl libmediainfo && yum clean all
+RUN yum install -y epel-release && \
+    yum install -y libmediainfo && \
+    yum clean all
 
 RUN curl -L http://download.sonarr.tv/v2/master/mono/NzbDrone.master.tar.gz -o NzbDrone.tar.gz && \
   tar xzf NzbDrone.tar.gz && \
