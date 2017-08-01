@@ -14,7 +14,6 @@ RUN \
        ca-certificates \
        bash \
        curl \
-       libmediainfo \
        mono \
        tzdata && \
  apk del --purge && \
