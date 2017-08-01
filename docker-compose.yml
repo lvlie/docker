@@ -32,17 +32,6 @@ services:
       - /data/cache/:/cache/
       - /data/:/data/
     restart: always
-  sickrage:
-    container_name: sickrage
-    build: ./sickrage
-    image: docker.io/lvlie/sickrage
-    ports:
-      - "8081:8081"
-    volumes:
-      - /config/sickrage/:/config/sickrage/
-      - /data/TV/:/data/TV/
-      - /data/cache/:/cache/
-    restart: always
   couchpotato:
     container_name: couchpotato
     build: ./couchpotato
