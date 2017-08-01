@@ -5,7 +5,7 @@ MAINTAINER Leon (lvlie) Vliegenthart
 EXPOSE 7878
 
 RUN yum install -y epel-release && \
-    yum install -y mono-core && \
+    yum install -y libmediainfo mono-core && \
     yum clean all
 
 RUN \
