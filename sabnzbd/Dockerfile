@@ -1,7 +1,9 @@
 # ubuntu has a regularly updated repo, so lets use that (but use LTS)
-FROM ubuntu:trusty
+FROM ubuntu:xenial
 
 MAINTAINER Leon (lvlie) Vliegenthart
+
+ENV PYTHONIOENCODING=utf-8
 
 # update package list
 RUN apt-get update 
@@ -20,7 +22,7 @@ RUN sed -i 's/universe/universe multiverse/g' /etc/apt/sources.list
 RUN apt-get update
 
 # install packages
-RUN apt-get install -y sabnzbdplus unrar zip python-sabyenc && apt-get clean
+RUN apt-get install -y sabnzbdplus unrar zip python-sabyenc python-cryptography && apt-get clean
 
 # add user for media
 RUN useradd -u 800 media
