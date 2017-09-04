@@ -29,24 +29,12 @@ services:
     build: ./sabnzbd
     image: docker.io/lvlie/sabnzbd
     ports:
-      - "8080:8080"
+      - "8088:8080"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /config/sabnzbd:/config/sabnzbd/
       - /data/cache/:/cache/
       - /data/:/data/
-    restart: always
-  couchpotato:
-    container_name: couchpotato
-    build: ./couchpotato
-    image: docker.io/lvlie/couchpotato
-    ports: 
-      - "5050:5050"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /config/couchpotato/:/config/couchpotato/
-      - /data/Movies/:/data/Movies/
-      - /data/cache/:/cache/
     restart: always
   plex:
     container_name: plex
@@ -113,3 +101,19 @@ services:
       - /data/Movies/:/data/Movies/
       - /data/cache/:/cache/
     restart: always
+  unifi:
+    container_name: unifi
+    image: docker.io/linuxserver/unifi:latest
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+      - "8443:8443"
+      - "8843:8843"
+      - "8880:8880"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /config/unifi/:/config
+    restart: always
+    environment:
+      - PUID=800
+      - PGID=1000
