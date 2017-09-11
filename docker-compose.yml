@@ -55,18 +55,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /data/backup/:/backup/
     restart: always
-  vpn:
-    container_name: vpn
-    image: docker.io/jpetazzo/dockvpn
-    ports:
-      - "1194:1194/udp"
-      - "444:443/tcp"
-    cap_add:
-      - NET_ADMIN
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /config/vpn/:/etc/openvpn/
-    restart: always
   plexpy:
     container_name: plexpy
     build: ./plexpy
