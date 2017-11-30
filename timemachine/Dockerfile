@@ -1,5 +1,5 @@
 # use ubuntu because avahi seems to work in docker, but use LTS
-FROM ubuntu:trusty
+FROM ubuntu:xenial
 
 MAINTAINER Leon (lvlie) Vliegenthart
 
