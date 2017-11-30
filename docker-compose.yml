@@ -105,3 +105,11 @@ services:
     environment:
       - PUID=800
       - PGID=1000
+  hass:
+    container_name: hass
+    image: docker.io/homeassistant/home-assistant
+    network_mode: "host"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /config/hass/:/config/
+    restart: always
