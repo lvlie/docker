@@ -6,6 +6,7 @@ version: '2'
 services:
   shellinabox:
     container_name: shellinabox
+    hostname: shellinabox
     build: ./shellinabox
     image: docker.io/lvlie/shellinabox
     ports:
@@ -15,6 +16,7 @@ services:
     restart: always
   proxy:
     container_name: proxy
+    hostname: proxy
     build: ./proxy
     image: docker.io/lvlie/proxy
     ports:
@@ -26,6 +28,7 @@ services:
     restart: always
   sabnzbd:
     container_name: sabnzbd
+    hostname: sabnzbd
     build: ./sabnzbd
     image: docker.io/lvlie/sabnzbd
     ports:
@@ -38,6 +41,7 @@ services:
     restart: always
   plex:
     container_name: plex
+    hostname: plex
     build: ./plex
     image: docker.io/lvlie/plex
     network_mode: "host"
@@ -48,6 +52,7 @@ services:
     restart: always
   timemachine:
     container_name: timemachine
+    hostname: timemachine
     build: ./timemachine
     image: docker.io/lvlie/timemachine
     network_mode: "host"
@@ -57,6 +62,7 @@ services:
     restart: always
   plexpy:
     container_name: plexpy
+    hostname: plexpy
     build: ./plexpy
     image: docker.io/lvlie/plexpy
     ports:
@@ -67,6 +73,7 @@ services:
     restart: always
   sonarr:
     container_name: sonarr
+    hostname: sonarr
     build: ./sonarr
     image: docker.io/lvlie/sonarr
     ports:
@@ -79,6 +86,7 @@ services:
     restart: always
   radarr:
     container_name: radarr
+    hostname: radarr
     build: ./radarr
     image: docker.io/lvlie/radarr
     ports:
@@ -91,6 +99,7 @@ services:
     restart: always
   unifi:
     container_name: unifi
+    hostname: unifi
     image: docker.io/linuxserver/unifi:latest
     ports:
       - "8080:8080"
@@ -108,9 +117,24 @@ services:
       - PGID=1000
   hass:
     container_name: hass
+    hostname: hass
     image: docker.io/homeassistant/home-assistant
     network_mode: "host"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /config/hass/:/config/
+    restart: always
+  duplicity:
+    container_name: duplicity
+    hostname: duplicity
+    build: ./duplicity
+    image: docker.io/lvlie/duplicity
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /config/:/config/:ro
+      - /data/unifi/:/data/unifi/:ro
+      - /home/:/home/:ro
+      - /backup/:/backup/
+      - /var/log/duplicity/:/var/log/duplicity/
+      - /etc/duplicity/:/etc/duplicity/:ro
     restart: always
