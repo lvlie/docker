@@ -7,7 +7,6 @@ EXPOSE 7878
 RUN yum install -y epel-release && \
     yum install -y libmediainfo mono-core mono-locale-extras && \
     yum clean all
-RUN ln -s /usr/lib64/libmediainfo.so.17 /usr/lib64/libmediainfo.so.0
 
 RUN \
  tag=$(curl -sX GET "https://api.github.com/repos/Radarr/Radarr/releases" | grep tag_name | head -1 | awk -F\" '{print $4}') && \

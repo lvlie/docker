@@ -7,7 +7,6 @@ EXPOSE 8989
 RUN yum install -y epel-release && \
     yum install -y libmediainfo mono-core && \
     yum clean all
-RUN ln -s /usr/lib64/libmediainfo.so.17 /usr/lib64/libmediainfo.so.0
 
 RUN curl -L http://download.sonarr.tv/v2/master/mono/NzbDrone.master.tar.gz -o NzbDrone.tar.gz && \
   tar xzf NzbDrone.tar.gz && \
