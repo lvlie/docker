@@ -23,7 +23,7 @@ services:
       - "443:443"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /config/httpd/:/config/httpd/:ro
+      - /var/config/httpd/:/config/httpd/:ro
       - /etc/letsencrypt/:/config/ssl/:ro
     restart: always
   sabnzbd:
@@ -35,9 +35,9 @@ services:
       - "8088:8080"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /config/sabnzbd:/config/sabnzbd/
-      - /data/cache/:/cache/
-      - /data/:/data/
+      - /var/config/sabnzbd:/config/sabnzbd/
+      - /srv/cache/:/cache/
+      - /srv/:/data/
     restart: always
   plex:
     container_name: plex
@@ -47,8 +47,8 @@ services:
     network_mode: "host"
     volumes: 
       - /etc/localtime:/etc/localtime:ro
-      - /config/plex/:/config/plex/
-      - /data/:/data/
+      - /var/config/plex/:/config/plex/
+      - /srv/:/data/
     restart: always
   timemachine:
     container_name: timemachine
@@ -58,7 +58,7 @@ services:
     network_mode: "host"
     volumes: 
       - /etc/localtime:/etc/localtime:ro
-      - /data/backup/:/backup/
+      - /srv/backup/:/backup/
     restart: always
   plexpy:
     container_name: plexpy
@@ -69,7 +69,7 @@ services:
       - "8181:8181/tcp"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /config/plexpy/:/config/plexpy
+      - /var/config/plexpy/:/config/plexpy
     restart: always
   sonarr:
     container_name: sonarr
@@ -80,9 +80,9 @@ services:
       - "8989:8989/tcp"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /config/sonarr/:/config/sonarr
-      - /data/TV/:/data/TV/
-      - /data/cache/:/cache/
+      - /var/config/sonarr/:/config/sonarr
+      - /srv/TV/:/data/TV/
+      - /srv/cache/:/cache/
     restart: always
   radarr:
     container_name: radarr
@@ -93,9 +93,9 @@ services:
       - "7878:7878/tcp"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /config/radarr/:/config/radarr
-      - /data/Movies/:/data/Movies/
-      - /data/cache/:/cache/
+      - /var/config/radarr/:/config/radarr
+      - /srv/Movies/:/data/Movies/
+      - /srv/cache/:/cache/
     restart: always
   unifi:
     container_name: unifi
@@ -110,7 +110,7 @@ services:
       - "3478:3478/udp"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /config/unifi/:/config
+      - /var/config/unifi/:/config
     restart: always
     environment:
       - PUID=800
@@ -122,7 +122,7 @@ services:
     network_mode: "host"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /config/hass/:/config/
+      - /var/config/hass/:/config/
     restart: always
   duplicity:
     container_name: duplicity
@@ -131,10 +131,10 @@ services:
     image: docker.io/lvlie/duplicity
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /config/:/config/:ro
-      - /data/unifi/:/data/unifi/:ro
+      - /var/config/:/config/:ro
+      - /srv/unifi/:/data/unifi/:ro
       - /home/:/home/:ro
-      - /backup/:/backup/
+      - /var/backup/:/backup/
       - /var/log/duplicity/:/var/log/duplicity/
       - /etc/duplicity/:/etc/duplicity/:ro
     restart: always
