@@ -131,10 +131,10 @@ services:
     image: docker.io/lvlie/duplicity
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/config/:/config/:ro
-      - /srv/unifi/:/data/unifi/:ro
+      - /var/config/:/var/config/:ro
+      - /srv/unifi/:/srv/unifi/:ro
       - /home/:/home/:ro
-      - /var/backup/:/backup/
-      - /var/log/duplicity/:/var/log/duplicity/
+      - /var/backup/:/var/backup/
+      - /var/log/duplicity/:/var/log/duplicity/:z
       - /etc/duplicity/:/etc/duplicity/:ro
     restart: always
