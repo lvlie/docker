@@ -115,6 +115,20 @@ services:
     environment:
       - PUID=800
       - PGID=1000
+  db:
+    container_name: db
+    hostname: db
+    image: mariadb
+    ports:
+      - "3306:3306"
+    volumes:
+      - /var/config/mariadb/:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: "homeassistant"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
   hass:
     container_name: hass
     hostname: hass
@@ -124,6 +138,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/config/hass/:/config/
     restart: always
+    depends_on:
+      - db
   duplicity:
     container_name: duplicity
     hostname: duplicity
