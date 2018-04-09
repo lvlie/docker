@@ -183,3 +183,22 @@ services:
     restart: always
     depends_on:
       - influx
+    environment:
+      GF_DEFAULT_INSTANCE_NAME: "home"
+      GF_AUTH_BASIC_ENABLED: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_NAME: "home"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+      GF_SERVER_ROOT_URL: "${GF_SERVER_ROOT_URL}"
+  telegraf:
+    container_name: telegraf
+    hostname: telegraf
+    image: telegraf:latest
+    network_mode: "host"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: always
+    depends_on:
+      - influx
