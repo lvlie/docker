@@ -1,6 +1,28 @@
 version: '2' 
 
 services:
+  nginx:
+    container_name: nginx
+    hostname: nginx
+    image: docker.io/linuxserver/letsencrypt:latest
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/config/nginx/:/config/
+    restart: always
+    environment:
+      - TZ=Europe/Amsterdam
+      - PUID=800
+      - PGID=1000
+      - EMAIL=${EMAIL} 
+      - URL=${DOMAIN}
+      - SUBDOMAINS=${SUBDOMAINS}
+      - VALIDATION=${VALIDATION}
+      - DHLEVEL=4096
   shellinabox:
     container_name: shellinabox
     hostname: shellinabox
@@ -10,18 +32,6 @@ services:
       - "4200:4200"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-    restart: always
-  proxy:
-    container_name: proxy
-    hostname: proxy
-    build: ./proxy
-    image: docker.io/lvlie/proxy
-    ports:
-      - "443:443"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /var/config/httpd/:/config/httpd/:ro
-      - /etc/letsencrypt/:/config/ssl/:ro
     restart: always
   sabnzbd:
     container_name: sabnzbd
@@ -208,7 +218,9 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_AUTH_ANONYMOUS_ORG_NAME: "home"
       GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
-      GF_SERVER_ROOT_URL: "${GF_SERVER_ROOT_URL}"
+      GF_SERVER_PROTOCOL: http
+      GF_SERVER_DOMAIN: "${DOMAIN}"
+      GF_SERVER_ROOT_URL: "%(protocol)s://%(domain)s:/grafana"
   telegraf:
     container_name: telegraf
     hostname: telegraf
