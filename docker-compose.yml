@@ -1,6 +1,3 @@
-# Docker compose file for lvlie docker images. We use the automatically built docker images from the hub, so we dont specify the build key. 
-# The source however is in the same git repository. 
-
 version: '2' 
 
 services:
@@ -29,27 +26,35 @@ services:
   sabnzbd:
     container_name: sabnzbd
     hostname: sabnzbd
-    build: ./sabnzbd
-    image: docker.io/lvlie/sabnzbd
+    image: docker.io/linuxserver/sabnzbd:latest
     ports:
       - "8088:8080"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/config/sabnzbd:/config/sabnzbd/
-      - /srv/cache/:/cache/
-      - /srv/:/data/
+      - /var/config/sabnzbd/:/config/
+      - /srv/cache/incomplete:/incomplete-downloads/
+      - /srv/cache/complete:/downloads/
+      - /srv/:/data
     restart: always
+    environment:
+      - TZ=Europe/Amsterdam
+      - PUID=800
+      - PGID=1000
   plex:
     container_name: plex
     hostname: plex
-    build: ./plex
-    image: docker.io/lvlie/plex
+    image: docker.io/linuxserver/plex:latest
     network_mode: "host"
     volumes: 
       - /etc/localtime:/etc/localtime:ro
-      - /var/config/plex/:/config/plex/
+      - /var/config/plex/:/config/
       - /srv/:/data/
     restart: always
+    environment:
+      - TZ=Europe/Amsterdam
+      - PUID=800
+      - PGID=1000
+      - VERSION=latest
   timemachine:
     container_name: timemachine
     hostname: timemachine
@@ -60,43 +65,52 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /srv/backup/:/backup/
     restart: always
-  plexpy:
-    container_name: plexpy
-    hostname: plexpy
-    build: ./plexpy
-    image: docker.io/lvlie/plexpy
+  tautulli:
+    container_name: tautulli
+    hostname: tautulli
+    image: docker.io/linuxserver/tautulli:latest
     ports:
       - "8181:8181/tcp"
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /var/config/plexpy/:/config/plexpy
+      - /var/config/plexpy/:/config
+      - /var/config/plex/Library/Logs/:/logs:ro
     restart: always
+    environment:
+      - TZ=Europe/Amsterdam
+      - PUID=800
+      - PGID=1000
   sonarr:
     container_name: sonarr
     hostname: sonarr
-    build: ./sonarr
-    image: docker.io/lvlie/sonarr
+    image: docker.io/linuxserver/sonarr:latest
     ports:
       - "8989:8989/tcp"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/config/sonarr/:/config/sonarr
-      - /srv/TV/:/data/TV/
-      - /srv/cache/:/cache/
+      - /var/config/sonarr/:/config
+      - /srv/TV/:/tv
+      - /srv/cache/:/downloads
     restart: always
+    environment:
+      - TZ=Europe/Amsterdam
+      - PUID=800
+      - PGID=1000
   radarr:
     container_name: radarr
     hostname: radarr
-    build: ./radarr
-    image: docker.io/lvlie/radarr
+    image: docker.io/linuxserver/radarr:latest
     ports:
       - "7878:7878/tcp"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/config/radarr/:/config/radarr
-      - /srv/Movies/:/data/Movies/
-      - /srv/cache/:/cache/
+      - /var/config/radarr/:/config
+      - /srv/Movies/:/movies
+      - /srv/cache/:/downloads
     restart: always
+    environment:
+      - TZ=Europe/Amsterdam
+      - PUID=800
+      - PGID=1000
   unifi:
     container_name: unifi
     hostname: unifi
@@ -113,12 +127,13 @@ services:
       - /var/config/unifi/:/config
     restart: always
     environment:
+      - TZ=Europe/Amsterdam
       - PUID=800
       - PGID=1000
   db:
     container_name: db
     hostname: db
-    image: mariadb
+    image: mariadb:latest
     ports:
       - "3306:3306"
     volumes:
@@ -132,11 +147,13 @@ services:
   hass:
     container_name: hass
     hostname: hass
-    image: docker.io/homeassistant/home-assistant
+    image: docker.io/homeassistant/home-assistant:latest
     network_mode: "host"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/config/hass/:/config/
+    devices:
+      - "/dev/ttyACM0:/dev/ttyACM0"
     restart: always
     depends_on:
       - db
@@ -145,20 +162,22 @@ services:
       - sonarr
       - radarr
       - unifi
-  duplicity:
-    container_name: duplicity
-    hostname: duplicity
-    build: ./duplicity
-    image: docker.io/lvlie/duplicity
+  duplicati:
+    container_name: duplicati
+    hostname: duplicati
+    image: docker.io/linuxserver/duplicati:latest
+    ports:
+      - "8200:8200"
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /var/config/:/var/config/:ro
-      - /srv/unifi/:/srv/unifi/:ro
-      - /home/:/home/:ro
-      - /var/backup/:/var/backup/
-      - /var/log/duplicity/:/var/log/duplicity/:z
-      - /etc/duplicity/:/etc/duplicity/:ro
+      - /var/config/:/backup/var/config/:ro
+      - /srv/backup/:/backup/srv/backup/:ro
+      - /home/:/backup/home/:ro
+      - /var/config/duplicati/:/config
     restart: always
+    environment:
+      - TZ=Europe/Amsterdam
+      - PUID=800
+      - PGID=1000
   influx:
     container_name: influx
     hostname: influx
@@ -202,3 +221,11 @@ services:
     restart: always
     depends_on:
       - influx
+  watchtower:
+    container_name: watchtower
+    hostname: watchtower
+    image: v2tec/watchtower:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --schedule "0 2 * * * *"
+    restart: always
