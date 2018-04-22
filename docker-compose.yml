@@ -97,9 +97,9 @@ services:
       - "8989:8989/tcp"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/config/sonarr/:/config
-      - /srv/TV/:/tv
-      - /srv/cache/:/downloads
+      - /var/config/sonarr/:/config/
+      - /srv/TV/:/tv/
+      - /srv/cache/complete:/downloads/
     restart: always
     environment:
       - TZ=Europe/Amsterdam
@@ -113,9 +113,9 @@ services:
       - "7878:7878/tcp"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/config/radarr/:/config
-      - /srv/Movies/:/movies
-      - /srv/cache/:/downloads
+      - /var/config/radarr/:/config/
+      - /srv/Movies/:/movies/
+      - /srv/cache/complete:/downloads/
     restart: always
     environment:
       - TZ=Europe/Amsterdam
