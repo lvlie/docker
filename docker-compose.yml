@@ -164,6 +164,7 @@ services:
       - /var/config/hass/:/config/
     devices:
       - "/dev/ttyACM0:/dev/ttyACM0"
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
     restart: always
     depends_on:
       - db
