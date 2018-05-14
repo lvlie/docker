@@ -242,3 +242,14 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     command: --schedule "0 2 * * * *"
     restart: always
+  nodered:
+    container_name: nodered
+    hostname: nodered
+    image: nodered/node-red-docker:latest
+    ports:
+      - "1880:1880"
+    volumes:
+      - /var/config/node-red/:/data
+    restart: always
+    environment:
+      - TZ=Europe/Amsterdam
