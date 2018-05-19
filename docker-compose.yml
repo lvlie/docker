@@ -245,7 +245,7 @@ services:
   nodered:
     container_name: nodered
     hostname: nodered
-    image: nodered/node-red-docker:latest
+    image: nodered/node-red-docker:v8
     ports:
       - "1880:1880"
     volumes:
