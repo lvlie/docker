@@ -1,42 +1,67 @@
 version: '3' 
 
+networks:
+  proxy:
+    external: true
+
 services:
-  nginx:
-    container_name: nginx
-    hostname: nginx
-    image: docker.io/linuxserver/letsencrypt:latest
-    cap_add:
-      - NET_ADMIN
+  traefik:
+    container_name: traefik
+    hostname: traefik
+    image: traefik
+    networks:
+      - proxy
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /var/config/nginx/:/config/
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/config/traefik/traefik.toml:/traefik.toml
+      - /var/config/traefik/acme.json:/acme.json
+      - /var/config/traefik/rules/:/rules/
+      - /var/config/traefik/.htpasswd:/.htpasswd:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: always
     environment:
-      - TZ=Europe/Amsterdam
-      - PUID=800
-      - PGID=1000
-      - EMAIL=${EMAIL} 
-      - URL=${DOMAIN}
-      - SUBDOMAINS=${SUBDOMAINS}
-      - VALIDATION=${VALIDATION}
-      - DHLEVEL=4096
+      - TZ=Europe\Amsterdam
+    labels:
+      - traefik.enable=true
+      - traefik.port=8082
+      - traefik.frontend.rule=Host:proxy.${DOMAIN}
+      - traefik.frontend.auth.basic="${HTPW}"
+      - traefik.frontend.headers.contentTypeNosniff=true
+      - traefik.frontend.headers.forceSTSHeader=true
+      - traefik.frontend.headers.STSSeconds=15552000
+      - traefik.frontend.headers.STSIncludeSubdomains=true
+      - traefik.frontend.headers.STSPreload=true
+      - traefik.frontend.headers.isDevelopment=false
   shellinabox:
     container_name: shellinabox
     hostname: shellinabox
     build: ./shellinabox
     image: docker.io/lvlie/shellinabox
-    ports:
-      - "4200:4200"
+    networks:
+      - proxy
     volumes:
       - /etc/localtime:/etc/localtime:ro
     restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.port=4200
+      - traefik.frontend.rule=Host:siab.${DOMAIN}
+      - traefik.frontend.auth.basic="${HTPW}"
+      - traefik.frontend.headers.contentTypeNosniff=true
+      - traefik.frontend.headers.forceSTSHeader=true
+      - traefik.frontend.headers.STSSeconds=15552000
+      - traefik.frontend.headers.STSIncludeSubdomains=true
+      - traefik.frontend.headers.STSPreload=true
+      - traefik.frontend.headers.isDevelopment=false
   sabnzbd:
     container_name: sabnzbd
     hostname: sabnzbd
     image: docker.io/linuxserver/sabnzbd:latest
+    networks:
+      - proxy
     ports:
       - "8088:8080"
     volumes:
@@ -50,6 +75,17 @@ services:
       - TZ=Europe/Amsterdam
       - PUID=800
       - PGID=1000
+    labels:
+      - traefik.enable=true
+      - traefik.port=8080
+      - traefik.frontend.rule=Host:sab.${DOMAIN}
+      - traefik.frontend.auth.basic="${HTPW}"
+      - traefik.frontend.headers.contentTypeNosniff=true
+      - traefik.frontend.headers.forceSTSHeader=true
+      - traefik.frontend.headers.STSSeconds=15552000
+      - traefik.frontend.headers.STSIncludeSubdomains=true
+      - traefik.frontend.headers.STSPreload=true
+      - traefik.frontend.headers.isDevelopment=false
   plex:
     container_name: plex
     hostname: plex
@@ -89,6 +125,8 @@ services:
     container_name: tautulli
     hostname: tautulli
     image: docker.io/linuxserver/tautulli:latest
+    networks:
+      - proxy
     ports:
       - "8181:8181/tcp"
     volumes:
@@ -99,10 +137,23 @@ services:
       - TZ=Europe/Amsterdam
       - PUID=800
       - PGID=1000
+    labels:
+      - traefik.enable=true
+      - traefik.port=8181
+      - traefik.frontend.rule=Host:plexpy.${DOMAIN}
+      - traefik.frontend.auth.basic="${HTPW}"
+      - traefik.frontend.headers.contentTypeNosniff=true
+      - traefik.frontend.headers.forceSTSHeader=true
+      - traefik.frontend.headers.STSSeconds=15552000
+      - traefik.frontend.headers.STSIncludeSubdomains=true
+      - traefik.frontend.headers.STSPreload=true
+      - traefik.frontend.headers.isDevelopment=false
   sonarr:
     container_name: sonarr
     hostname: sonarr
     image: docker.io/linuxserver/sonarr:latest
+    networks:
+      - proxy
     ports:
       - "8989:8989/tcp"
     volumes:
@@ -115,10 +166,23 @@ services:
       - TZ=Europe/Amsterdam
       - PUID=800
       - PGID=1000
+    labels:
+      - traefik.enable=true
+      - traefik.port=8989
+      - traefik.frontend.rule=Host:sonarr.${DOMAIN}
+      - traefik.frontend.auth.basic="${HTPW}"
+      - traefik.frontend.headers.contentTypeNosniff=true
+      - traefik.frontend.headers.forceSTSHeader=true
+      - traefik.frontend.headers.STSSeconds=15552000
+      - traefik.frontend.headers.STSIncludeSubdomains=true
+      - traefik.frontend.headers.STSPreload=true
+      - traefik.frontend.headers.isDevelopment=false
   radarr:
     container_name: radarr
     hostname: radarr
     image: docker.io/linuxserver/radarr:latest
+    networks:
+      - proxy
     ports:
       - "7878:7878/tcp"
     volumes:
@@ -131,10 +195,21 @@ services:
       - TZ=Europe/Amsterdam
       - PUID=800
       - PGID=1000
+    labels:
+      - traefik.enable=true
+      - traefik.port=7878
+      - traefik.frontend.rule=Host:radarr.${DOMAIN}
+      - traefik.frontend.auth.basic="${HTPW}"
+      - traefik.frontend.headers.contentTypeNosniff=true
+      - traefik.frontend.headers.forceSTSHeader=true
+      - traefik.frontend.headers.STSSeconds=15552000
+      - traefik.frontend.headers.STSIncludeSubdomains=true
+      - traefik.frontend.headers.STSPreload=true
+      - traefik.frontend.headers.isDevelopment=false
   unifi:
     container_name: unifi
     hostname: unifi
-    image: docker.io/linuxserver/unifi:latest
+    image: docker.io/linuxserver/unifi:unstable
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -168,7 +243,7 @@ services:
     container_name: hass
     hostname: hass
     image: docker.io/homeassistant/home-assistant:latest
-    network_mode: "host"
+    network_mode: host
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/config/hass/:/config/
@@ -241,9 +316,12 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/rootfs/proc/:ro
     restart: always
     depends_on:
       - influx
+    environment:
+      HOST_PROC: "/rootfs/proc"
   watchtower:
     container_name: watchtower
     hostname: watchtower
