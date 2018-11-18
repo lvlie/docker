@@ -9,6 +9,7 @@ services:
     container_name: traefik
     hostname: traefik
     image: traefik
+    domainname: ${DOMAIN}
     networks:
       - proxy
     ports:
@@ -21,7 +22,7 @@ services:
       - /var/config/traefik/rules/:/rules/
       - /var/config/traefik/.htpasswd:/.htpasswd:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    restart: always
+    restart: unless-stopped
     environment:
       - TZ=Europe\Amsterdam
     labels:
@@ -40,11 +41,12 @@ services:
     hostname: shellinabox
     build: ./shellinabox
     image: docker.io/lvlie/shellinabox
+    domainname: ${DOMAIN}
     networks:
       - proxy
     volumes:
       - /etc/localtime:/etc/localtime:ro
-    restart: always
+    restart: unless-stopped
     labels:
       - traefik.enable=true
       - traefik.port=4200
@@ -60,6 +62,7 @@ services:
     container_name: sabnzbd
     hostname: sabnzbd
     image: docker.io/linuxserver/sabnzbd:latest
+    domainname: ${DOMAIN}
     networks:
       - proxy
     ports:
@@ -70,7 +73,7 @@ services:
       - /srv/cache/incomplete:/incomplete-downloads/
       - /srv/cache/complete:/downloads/
       - /srv/:/data
-    restart: always
+    restart: unless-stopped
     environment:
       - TZ=Europe/Amsterdam
       - PUID=800
@@ -90,6 +93,7 @@ services:
     container_name: plex
     hostname: plex
     image: docker.io/plexinc/pms-docker:latest
+    domainname: ${DOMAIN}
     ports:
       - 32400:32400/tcp
       - 3005:3005/tcp
@@ -105,7 +109,9 @@ services:
       - /var/config/plex/:/config/
       - /var/config/plex/temp/Transcode/:/transcode/
       - /srv/:/data/
-    restart: always
+    devices:
+      - /dev/dri:/dev/dri
+    restart: unless-stopped
     environment:
       - TZ=Europe/Amsterdam
       - PLEX_UID=800
@@ -116,15 +122,17 @@ services:
     hostname: timemachine
     build: ./timemachine
     image: docker.io/lvlie/timemachine
+    domainname: ${DOMAIN}
     network_mode: "host"
     volumes: 
       - /etc/localtime:/etc/localtime:ro
       - /srv/backup/:/backup/
-    restart: always
+    restart: unless-stopped
   tautulli:
     container_name: tautulli
     hostname: tautulli
     image: docker.io/linuxserver/tautulli:latest
+    domainname: ${DOMAIN}
     networks:
       - proxy
     ports:
@@ -132,7 +140,7 @@ services:
     volumes:
       - /var/config/plexpy/:/config
       - /var/config/plex/Library/Logs/:/logs:ro
-    restart: always
+    restart: unless-stopped
     environment:
       - TZ=Europe/Amsterdam
       - PUID=800
@@ -152,6 +160,7 @@ services:
     container_name: sonarr
     hostname: sonarr
     image: docker.io/linuxserver/sonarr:latest
+    domainname: ${DOMAIN}
     networks:
       - proxy
     ports:
@@ -161,7 +170,7 @@ services:
       - /var/config/sonarr/:/config/
       - /srv/TV/:/tv/
       - /srv/cache/complete:/downloads/
-    restart: always
+    restart: unless-stopped
     environment:
       - TZ=Europe/Amsterdam
       - PUID=800
@@ -181,6 +190,7 @@ services:
     container_name: radarr
     hostname: radarr
     image: docker.io/linuxserver/radarr:latest
+    domainname: ${DOMAIN}
     networks:
       - proxy
     ports:
@@ -190,7 +200,7 @@ services:
       - /var/config/radarr/:/config/
       - /srv/Movies/:/movies/
       - /srv/cache/complete:/downloads/
-    restart: always
+    restart: unless-stopped
     environment:
       - TZ=Europe/Amsterdam
       - PUID=800
@@ -210,6 +220,7 @@ services:
     container_name: unifi
     hostname: unifi
     image: docker.io/linuxserver/unifi:unstable
+    domainname: ${DOMAIN}
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -220,7 +231,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/config/unifi/:/config
-    restart: always
+    restart: unless-stopped
     environment:
       - TZ=Europe/Amsterdam
       - PUID=800
@@ -229,11 +240,12 @@ services:
     container_name: db
     hostname: db
     image: mariadb:latest
+    domainname: ${DOMAIN}
     ports:
       - "3306:3306"
     volumes:
       - /var/config/mariadb/:/var/lib/mysql
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_DATABASE: "homeassistant"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
@@ -243,6 +255,7 @@ services:
     container_name: hass
     hostname: hass
     image: docker.io/homeassistant/home-assistant:latest
+    domainname: ${DOMAIN}
     network_mode: host
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -250,7 +263,7 @@ services:
     devices:
       - "/dev/ttyACM0:/dev/ttyACM0"
       - "/dev/ttyUSB0:/dev/ttyUSB0"
-    restart: always
+    restart: unless-stopped
     depends_on:
       - db
       - influx
@@ -262,6 +275,7 @@ services:
     container_name: duplicati
     hostname: duplicati
     image: docker.io/linuxserver/duplicati:latest
+    domainname: ${DOMAIN}
     ports:
       - "8200:8200"
     volumes:
@@ -269,15 +283,18 @@ services:
       - /srv/backup/:/backup/srv/backup/:ro
       - /home/:/backup/home/:ro
       - /var/config/duplicati/:/config
-    restart: always
+      - /var/srv/cache/duplicati:/temp
+    restart: unless-stopped
     environment:
       - TZ=Europe/Amsterdam
       - PUID=800
       - PGID=1000
+    privileged: true
   influx:
     container_name: influx
     hostname: influx
     image: influxdb:latest
+    domainname: ${DOMAIN}
     ports:
       - "8083:8083"
       - "8086:8086"
@@ -285,17 +302,20 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/srv/db/influx/:/var/lib/influxdb
-    restart: always
+    restart: unless-stopped
   grafana:
     container_name: grafana
     hostname: grafana
     image: grafana/grafana:latest
+    domainname: ${DOMAIN}
+    networks:
+      - proxy
     ports:
       - "3000:3000"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/srv/db/grafana/:/var/lib/grafana
-    restart: always
+    restart: unless-stopped
     depends_on:
       - influx
     environment:
@@ -304,20 +324,31 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_AUTH_ANONYMOUS_ORG_NAME: "home"
       GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
-      GF_SERVER_PROTOCOL: http
-      GF_SERVER_DOMAIN: "${DOMAIN}"
-      GF_SERVER_ROOT_URL: "%(protocol)s://%(domain)s:/grafana"
+      GF_SERVER_DOMAIN: "grafana.${DOMAIN}"
+      GF_SERVER_ROOT_URL: "https://grafana.${DOMAIN}"
+    labels:
+      - traefik.enable=true
+      - traefik.port=3000
+      - traefik.frontend.rule=Host:grafana.${DOMAIN}
+      - traefik.frontend.auth.basic="${HTPW}"
+      - traefik.frontend.headers.contentTypeNosniff=true
+      - traefik.frontend.headers.forceSTSHeader=true
+      - traefik.frontend.headers.STSSeconds=15552000
+      - traefik.frontend.headers.STSIncludeSubdomains=true
+      - traefik.frontend.headers.STSPreload=true
+      - traefik.frontend.headers.isDevelopment=false
   telegraf:
     container_name: telegraf
     hostname: telegraf
     image: telegraf:latest
+    domainname: ${DOMAIN}
     network_mode: "host"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /proc/:/rootfs/proc/:ro
-    restart: always
+    restart: unless-stopped
     depends_on:
       - influx
     environment:
@@ -326,18 +357,8 @@ services:
     container_name: watchtower
     hostname: watchtower
     image: v2tec/watchtower:latest
+    domainname: ${DOMAIN}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command: --schedule "0 2 * * * *"
-    restart: always
-  nodered:
-    container_name: nodered
-    hostname: nodered
-    image: nodered/node-red-docker:v8
-    ports:
-      - "1880:1880"
-    volumes:
-      - /var/config/node-red/:/data
-    restart: always
-    environment:
-      - TZ=Europe/Amsterdam
+    restart: unless-stopped
