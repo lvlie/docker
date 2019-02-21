@@ -219,15 +219,17 @@ services:
   unifi:
     container_name: unifi
     hostname: unifi
-    image: docker.io/linuxserver/unifi:unstable
+    image: docker.io/linuxserver/unifi-controller:latest
     domainname: ${DOMAIN}
     ports:
+      - "10001:10001/udp"
       - "8080:8080"
       - "8081:8081"
       - "8443:8443"
       - "8843:8843"
       - "8880:8880"
       - "3478:3478/udp"
+      - "6789:6789"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/config/unifi/:/config
